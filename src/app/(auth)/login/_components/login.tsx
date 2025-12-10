@@ -67,7 +67,7 @@ export default function Login() {
               form={form}
               name="email"
               label="email"
-              placeholder="indert email here"
+              placeholder="Insert email here"
               type="email"
             />
             <FormInput
