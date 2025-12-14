@@ -1,7 +1,10 @@
+import { title } from "process";
+import UserManagement from "./_components/user";
+
+export const metadata = {
+  title: "WPU Cafe | User Management",
+};
+
 export default function UserManagementPage() {
-  return (
-    <div className="">
-      <h1>ini halaman admin user menejemen</h1>
-    </div>
-  );
+  return <UserManagement />;
 }
