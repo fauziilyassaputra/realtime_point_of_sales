@@ -1,4 +1,3 @@
-"use client";
 import FormInput from "@/components/common/form-input";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,40 +20,48 @@ import {
 } from "@/validations/auth-validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
-import { startTransition, useActionState, useEffect } from "react";
+import { startTransition, useActionState, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { createUser } from "../actions";
 import { toast } from "sonner";
 import FormSelect from "@/components/common/form-select";
+import FormImage from "@/components/common/form-image";
 
-export default function DialogCreateUSer({ refetch }: { refetch: () => void }) {
+export default function DialogCreateUser({ refetch }: { refetch: () => void }) {
   const form = useForm<CreateUserForm>({
     resolver: zodResolver(createUserSchema),
     defaultValues: INITIAL_CREATE_USER_FORM,
   });
 
-  const [createUserState, createUsernAction, isPendingcreateUser] =
+  const [createUserState, createUserAction, isPendingCreateUser] =
     useActionState(createUser, INITIAL_STATE_CREATE_USER);
 
-  const onSubmit = form.handleSubmit(async (data) => {
+  const [preview, setPreview] = useState<
+    { file: File; displayUrl: string } | undefined
+  >(undefined);
+
+  const onSubmit = form.handleSubmit((data) => {
     const formData = new FormData();
     Object.entries(data).forEach(([key, value]) => {
-      formData.append(key, value);
+      formData.append(key, key === "avatar_url" ? preview!.file ?? "" : value);
     });
+
     startTransition(() => {
-      createUsernAction(formData);
+      createUserAction(formData);
     });
   });
 
   useEffect(() => {
     if (createUserState?.status === "error") {
-      toast.error("Create User failed", {
+      toast.error("Create User Failed ", {
         description: createUserState.errors?._form?.[0],
       });
     }
+
     if (createUserState?.status === "success") {
       toast.success("Create User Success");
       form.reset();
+      setPreview(undefined);
       document.querySelector<HTMLButtonElement>('[data-state="open"]')?.click();
       refetch();
     }
@@ -67,33 +74,38 @@ export default function DialogCreateUSer({ refetch }: { refetch: () => void }) {
           <DialogTitle>Create User</DialogTitle>
           <DialogDescription>register a new user</DialogDescription>
         </DialogHeader>
-        <form className="space-y-4" onSubmit={onSubmit}>
+        <form onSubmit={onSubmit} className="space-y-4">
           <FormInput
             form={form}
             name="name"
-            label="name"
-            placeholder="insert your name"
+            label="Name"
+            placeholder="Insert your name"
           />
           <FormInput
             form={form}
             name="email"
-            label="email"
+            label="Email"
             placeholder="Insert email here"
             type="email"
           />
-
+          <FormImage
+            form={form}
+            name="avatar_url"
+            label="Avatar"
+            preview={preview}
+            setPreview={setPreview}
+          />
           <FormSelect
             form={form}
             name="role"
-            label="role"
+            label="Role"
             selectItem={ROLE_LIST}
           />
-
           <FormInput
             form={form}
             name="password"
-            label="password"
-            placeholder="***********"
+            label="Password"
+            placeholder="******"
             type="password"
           />
           <DialogFooter>
@@ -101,7 +113,7 @@ export default function DialogCreateUSer({ refetch }: { refetch: () => void }) {
               <Button variant="outline">Cancel</Button>
             </DialogClose>
             <Button type="submit">
-              {isPendingcreateUser ? (
+              {isPendingCreateUser ? (
                 <Loader2 className="animate-spin" />
               ) : (
                 "Create"

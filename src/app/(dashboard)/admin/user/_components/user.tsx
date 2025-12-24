@@ -1,4 +1,5 @@
 "use client";
+
 import DataTable from "@/components/common/data-table";
 import DropdownAction from "@/components/common/dropdown-action";
 import { Button } from "@/components/ui/button";
@@ -11,7 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Pencil, Trash2 } from "lucide-react";
 import { useMemo } from "react";
 import { toast } from "sonner";
-import DialogCreateUSer from "./dialog-create-user";
+import DialogCreateUser from "./dialog-create-user";
 
 export default function UserManagement() {
   const supabase = createClient();
@@ -35,12 +36,13 @@ export default function UserManagement() {
         .select("*", { count: "exact" })
         .range((currentPage - 1) * currentLimit, currentPage * currentLimit - 1)
         .order("created_at")
-        .ilike("name", `%${currentSearch}`);
+        .ilike("name", `%${currentSearch}%`);
 
       if (result.error)
-        toast.error("Get user data failed", {
+        toast.error("Get User data failed", {
           description: result.error.message,
         });
+
       return result;
     },
   });
@@ -56,7 +58,7 @@ export default function UserManagement() {
           menu={[
             {
               label: (
-                <span className="flex items-center gap-2">
+                <span className="flex item-center gap-2">
                   <Pencil />
                   Edit
                 </span>
@@ -65,7 +67,7 @@ export default function UserManagement() {
             },
             {
               label: (
-                <span className="flex items-center gap-2">
+                <span className="flex item-center gap-2">
                   <Trash2 className="text-red-400" />
                   Delete
                 </span>
@@ -88,7 +90,7 @@ export default function UserManagement() {
   return (
     <div className="w-full">
       <div className="flex flex-col lg:flex-row mb-4 gap-2 justify-between w-full">
-        <h1 className="text-2xl font-bold">User management</h1>
+        <h1 className="text-2xl font-bold">User Management</h1>
         <div className="flex gap-2">
           <Input
             placeholder="Search by name"
@@ -98,7 +100,7 @@ export default function UserManagement() {
             <DialogTrigger asChild>
               <Button variant="outline">Create</Button>
             </DialogTrigger>
-            <DialogCreateUSer refetch={refetch} />
+            <DialogCreateUser refetch={refetch} />
           </Dialog>
         </div>
       </div>
