@@ -6,7 +6,7 @@ create table public.menus (
   discount numeric,
   image_url text,
   category text,
-  is_availabel boolean,
+  is_available boolean,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   updated_at timestamp with time zone default timezone('utc'::text, now()) not null,
 

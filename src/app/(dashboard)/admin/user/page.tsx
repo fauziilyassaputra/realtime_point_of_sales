@@ -1,4 +1,3 @@
-import { title } from "process";
 import UserManagement from "./_components/user";
 
 export const metadata = {

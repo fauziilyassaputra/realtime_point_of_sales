@@ -152,39 +152,6 @@ export async function updateUser(prevState: AuthFormState, formData: FormData) {
   };
 }
 
-// export async function deleteUser(prevState: AuthFormState, formData: FormData) {
-//   const supabase = await createClient({ isAdmin: true });
-//   const image = formData.get("avatar_url") as string;
-//   const { status, errors } = await deleteFile(
-//     "images",
-//     image.split("/images/")[1]
-//   );
-
-//   if (status === "error") {
-//     return {
-//       status: "error",
-//       errors: {
-//         ...prevState.errors,
-//         _form: [...(errors?._form?.[0] ?? "Unknown wrror")],
-//       },
-//     };
-//   }
-
-//   const { error } = await supabase.auth.admin.deleteUser(
-//     formData.get("id") as string
-//   );
-
-//   if (error) {
-//     return {
-//       status: "error",
-//       errors: {
-//         ...prevState.errors,
-//         _form: [error.message],
-//       },
-//     };
-//   }
-//   return { status: "success" };
-// }
 export async function deleteUser(prevState: AuthFormState, formData: FormData) {
   const supabase = await createClient({ isAdmin: true });
   const image = formData.get("avatar_url") as string;

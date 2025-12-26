@@ -39,7 +39,7 @@ export default function FormUser<T extends FieldValues>({
           <DialogTitle> {type} User</DialogTitle>
           <DialogDescription>
             {type === "Create"
-              ? "REgister a new user"
+              ? "Register a new user"
               : "Make changes user here"}
           </DialogDescription>
         </DialogHeader>
