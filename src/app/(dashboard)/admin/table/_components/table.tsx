@@ -12,6 +12,10 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Table } from "@/validations/table-validation";
 import { HEADER_TABLE_TABLE } from "@/constants/table-constant";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import DialogCreateTable from "./dialog-create-table";
+import DialogUpdateTable from "./dialog-update-table";
 
 export default function TableManagement() {
   const supabase = createClient();
@@ -132,6 +136,12 @@ export default function TableManagement() {
             placeholder="Search by name, capacity and status"
             onChange={(e) => handleChangeSearch(e.target.value)}
           />
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline">Create</Button>
+            </DialogTrigger>
+            <DialogCreateTable refetch={refetch} />
+          </Dialog>
         </div>
       </div>
       <DataTable
@@ -143,6 +153,12 @@ export default function TableManagement() {
         currentLimit={currentLimit}
         onChangePage={handleChangePage}
         onChangeLimit={handleChangeLimit}
+      />
+      <DialogUpdateTable
+        open={selectedAction !== null && selectedAction.type === "update"}
+        refetch={refetch}
+        currentData={selectedAction?.data}
+        handleChangeAction={handleChangeAction}
       />
     </div>
   );
