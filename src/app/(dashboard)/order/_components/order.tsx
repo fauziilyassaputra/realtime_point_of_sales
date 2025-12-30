@@ -18,10 +18,7 @@ import { cn } from "@/lib/utils";
 import { Table } from "@/validations/table-validation";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import {
-  HEADER_TABLE_ORDER,
-  INITIAL_STATE_ORDER,
-} from "@/constants/order-constant";
+import { HEADER_TABLE_ORDER } from "@/constants/order-constant";
 import DialogCreateOrder from "./dialog-create-order";
 import { updateReservation } from "../actions";
 import { INITIAL_STATE_ACTION } from "@/constants/general-constant";
