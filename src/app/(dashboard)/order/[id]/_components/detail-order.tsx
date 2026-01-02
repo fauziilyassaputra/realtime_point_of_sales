@@ -31,7 +31,7 @@ export default function DetailOrder({ id }: { id: string }) {
     queryFn: async () => {
       const result = await supabase
         .from("orders")
-        .select("id,  customer_name, status, payment_url, tables (name, id)")
+        .select("id,  customer_name, status, payment_token, tables (name, id)")
         .eq("order_id", id)
         .single();
 
@@ -142,7 +142,7 @@ export default function DetailOrder({ id }: { id: string }) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-40">
-            {["pending", "process", " ready"].map((status, index) => {
+            {["pending", "process", "ready"].map((status, index) => {
               const nextStatus = ["process", "ready", "served"][index];
               return (
                 item.status === status && (
