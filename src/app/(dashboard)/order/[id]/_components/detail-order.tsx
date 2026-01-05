@@ -85,7 +85,7 @@ export default function DetailOrder({ id }: { id: string }) {
     queryFn: async () => {
       const result = await supabase
         .from("orders_menus")
-        .select("*, menus(id, name, image_url, price)", { count: "exact" })
+        .select("*, menus (id, name, image_url, price)", { count: "exact" })
         .eq("order_id", order?.id)
         .order("status");
 
