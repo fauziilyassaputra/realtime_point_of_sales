@@ -1,7 +1,9 @@
-export default function AdminDashboardPage() {
-  return (
-    <div className="">
-      <h1>Dashboard</h1>
-    </div>
-  );
+import DashBoard from "./_components/dashboard";
+
+export const metadata = {
+  title: "WPU Cafe | Dashboard",
+};
+
+export default function DashBoardPage() {
+  return <DashBoard />;
 }
