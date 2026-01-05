@@ -47,6 +47,29 @@ export default function DetailOrder({ id }: { id: string }) {
     enabled: !!id,
   });
 
+  const {
+    data: orderMenu,
+    isLoading: isLoadingOrderMenu,
+    refetch: refetchOrderMenu,
+  } = useQuery({
+    queryKey: ["orders_menu", order?.id, currentPage, currentLimit],
+    queryFn: async () => {
+      const result = await supabase
+        .from("orders_menus")
+        .select("*, menus(id, name, image_url, price)", { count: "exact" })
+        .eq("order_id", order?.id)
+        .order("status");
+
+      if (result.error)
+        toast.error("Get Order menu data failed", {
+          description: result.error.message,
+        });
+
+      return result;
+    },
+    enabled: !!order?.id,
+  });
+
   useEffect(() => {
     if (!order?.id) return;
 
@@ -70,29 +93,6 @@ export default function DetailOrder({ id }: { id: string }) {
       supabase.removeChannel(channel);
     };
   }, [order?.id]);
-
-  const {
-    data: orderMenu,
-    isLoading: isLoadingOrderMenu,
-    refetch: refetchOrderMenu,
-  } = useQuery({
-    queryKey: ["orders_menu", order?.id, currentPage, currentLimit],
-    queryFn: async () => {
-      const result = await supabase
-        .from("orders_menus")
-        .select("*, menus(id, name, image_url, price)", { count: "exact" })
-        .eq("order_id", order?.id)
-        .order("status");
-
-      if (result.error)
-        toast.error("Get Order menu data failed", {
-          description: result.error.message,
-        });
-
-      return result;
-    },
-    enabled: !!order?.id,
-  });
 
   const [updateStatusOrderState, updateStatusOrderAction] = useActionState(
     updateStatusOrderItem,
