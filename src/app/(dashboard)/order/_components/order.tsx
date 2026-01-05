@@ -79,7 +79,7 @@ export default function OrderManagement() {
         {
           event: "*",
           schema: "public",
-          table: "orders_menus",
+          table: "orders",
         },
         () => {
           refetchOrders();
