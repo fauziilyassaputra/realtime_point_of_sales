@@ -71,6 +71,19 @@ export default function OrderManagement() {
     },
   });
 
+  const { data: tables, refetch: refetchTables } = useQuery({
+    queryKey: ["tables"],
+    queryFn: async () => {
+      const result = await supabase
+        .from("tables")
+        .select("*")
+        .order("created_at")
+        .order("status");
+
+      return result.data;
+    },
+  });
+
   useEffect(() => {
     const channel = supabase
       .channel("change-order")
@@ -92,19 +105,6 @@ export default function OrderManagement() {
       supabase.removeChannel(channel);
     };
   }, []);
-
-  const { data: tables, refetch: refetchTables } = useQuery({
-    queryKey: ["tables"],
-    queryFn: async () => {
-      const result = await supabase
-        .from("tables")
-        .select("*")
-        .order("created_at")
-        .order("status");
-
-      return result.data;
-    },
-  });
 
   const [selectedAction, setSelectedAction] = useState<{
     data: Table;

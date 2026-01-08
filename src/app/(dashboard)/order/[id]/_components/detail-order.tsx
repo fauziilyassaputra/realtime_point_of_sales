@@ -22,22 +22,21 @@ import { EllipsisVertical } from "lucide-react";
 import { updateStatusOrderItem } from "../../actions";
 import { INITIAL_STATE_ACTION } from "@/constants/general-constant";
 import { useAuthStore } from "@/stores/auth-store";
+import Receipt from "./receipt";
 
 export default function DetailOrder({ id }: { id: string }) {
   const supabase = createClientSupabase();
   const { currentPage, currentLimit, handleChangePage, handleChangeLimit } =
     useDataTable();
   const profile = useAuthStore((state) => state.profile);
-  const {
-    data: order,
-    isLoading,
-    refetch: refetchOrder,
-  } = useQuery({
+  const { data: order } = useQuery({
     queryKey: ["order", id],
     queryFn: async () => {
       const result = await supabase
         .from("orders")
-        .select("id,  customer_name, status, payment_token, tables (name, id)")
+        .select(
+          "id,  customer_name, status, payment_token, tables (name, id), created_at"
+        )
         .eq("order_id", id)
         .single();
 
@@ -66,7 +65,6 @@ export default function DetailOrder({ id }: { id: string }) {
         },
         () => {
           refetchOrderMenu();
-          refetchOrder();
         }
       )
       .subscribe();
@@ -208,10 +206,13 @@ export default function DetailOrder({ id }: { id: string }) {
     <div className="w-full space-y-4">
       <div className="flex  items-center justify-between gap-4 w-full">
         <h1 className="text-2xl font-bold">Detail Order</h1>
-        {profile.role !== "kitchen" && (
+        {profile.role !== "kitchen" && order?.status == "process" && (
           <Link href={`/order/${id}/add`}>
             <Button>Add Order Item</Button>
           </Link>
+        )}
+        {order?.status === "settled" && (
+          <Receipt order={order} orderMenu={orderMenu?.data} orderId={id} />
         )}
       </div>
       <div className="flex flex-col lg:flex-row gap-4 w-full">
