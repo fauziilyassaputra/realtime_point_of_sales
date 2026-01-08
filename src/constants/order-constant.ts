@@ -73,3 +73,16 @@ export const INITIAL_STATE_GENERATE_PAYMENT = {
     payment_token: "",
   },
 };
+
+export const INITIAL_ORDER_TAKEAWAY = {
+  customer_name: "",
+};
+
+export const INITIAL_STATE_ORDER_TAKEAWAY = {
+  status: "idle",
+  errors: {
+    customer_name: [],
+
+    _form: [],
+  },
+};

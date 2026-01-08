@@ -7,3 +7,9 @@ export const orderFormSchema = z.object({
 });
 
 export type OrderForm = z.infer<typeof orderFormSchema>;
+
+export const orderTakeawayFormSchema = z.object({
+  customer_name: z.string().min(1, "Name is required"),
+});
+
+export type OrderTakeawayForm = z.infer<typeof orderTakeawayFormSchema>;
